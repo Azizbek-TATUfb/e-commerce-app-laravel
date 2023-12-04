@@ -16,7 +16,6 @@ class CreateValuesTable extends Migration
         Schema::create('values', function (Blueprint $table) {
             $table->id();
             $table->foreignId('attribute_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->timestamps();
         });

@@ -4,57 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\UserAddress;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return auth()->user()->orders;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreOrderRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(StoreOrderRequest $request)
     {
-        //
+        $sum =100;
+        $products =Product::query()->limit(2)->get();
+        $address =UserAddress::find($request->address_id);
+        auth()->user()->orders()->create([
+            'comment' => $request->comment,
+            'delivery_method_id' => $request->delivery_method_id,
+            'payment_type_id' => $request->payment_type_id,
+            'address' => $address,
+            'sum' => $sum,
+            'products' => $products,
+        ]);
+
+        return response()->json(['success' => true]);
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function show(Order $order)
     {
-        //
+        return new OrderResource($order);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function edit(Order $order)
     {
@@ -63,10 +63,6 @@ class OrderController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateOrderRequest  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
@@ -75,9 +71,6 @@ class OrderController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)
     {

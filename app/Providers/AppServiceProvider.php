@@ -2,32 +2,23 @@
 
 namespace App\Providers;
 
-use App\Repositories\SettingsRepository;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use League\Flysystem\Config;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        Paginator::useBootstrap();
+        //
     }
 }

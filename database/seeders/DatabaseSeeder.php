@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use App\Models\Product;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +21,9 @@ class DatabaseSeeder extends Seeder
             AttributeSeeder::class,
             ValueSeeder::class,
             ProductSeeder::class,
+            DeliveryMethodSeeder::class,
+            PaymentTypeSeeder::class,
+            UserAddressSeeder::class
         ]);
     }
 }

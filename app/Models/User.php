@@ -2,36 +2,29 @@
 
 namespace App\Models;
 
-use App\Models\Admin\Role;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
-    const STATUS_ACTIVE = 1; //active
-    const STATUS_INACTIVE = 2;//inactive
-    const STATUS_DESTROY = 3;//destroy
+    use HasApiTokens, HasFactory, Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'fullname',
         'first_name',
         'last_name',
+        'email',
+        'password',
         'phone',
-        'photo',
-        'status',
-        'created_by',
-        'updated_by',
     ];
 
     /**
@@ -51,10 +44,32 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function favorites():BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
+    }
+
+    public function addresses():HasMany
+    {
+      return   $this->hasMany(UserAddress::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function hasFavorite($favorite_id): bool
+    {
+        return $this->favorites()->where('product_id', $favorite_id)->exists();
+    }
+
 }

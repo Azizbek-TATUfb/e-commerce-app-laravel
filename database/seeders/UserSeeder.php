@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin\Role;
+use App\Models\Role;
 use App\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -17,13 +15,22 @@ class UserSeeder extends Seeder
     public function run()
     {
         $admin = User::create([
-          'name' => 'admin',
-          'fullname' => 'Mr Thomson',
+          'first_name' => 'Admin',
+          'last_name' => 'Admin',
           'email' => 'admin@g.c',
+          'phone' =>'+998991235',
           'password' => Hash::make('123'),
         ]);
-        $admin->role()->attach(1);
-//        User::factory()->count(10)->hasAttached([Role::where(2)])->create();
+        $admin->roles()->attach(1);
+        $admin = User::create([
+          'first_name' => 'Azizbek ',
+          'last_name' => 'Ismoilov',
+          'email' => 'admin2@g.c',
+          'phone' =>'+998991235',
+          'password' => Hash::make('123'),
+        ]);
+        $admin->roles()->attach(2);
+        User::factory()->count(10)->hasAttached([Role::find(2)])->create();
 
 //        $shop_costumer = User::create([
 //            'name' => 'shop_costumer',

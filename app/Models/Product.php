@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations, SoftDeletes;
 
     protected $fillable = [
         "category_id",
@@ -15,12 +20,19 @@ class Product extends Model
         "price",
         "description",
     ];
-
-    public function category(){
-        $this->belongsTo(Category::class);
+    public  $translatable = ['name', 'description'];
+    public function category():BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
-    public function stock(){
-        $this->hasMany(Stock::class);
+    public function stocks():HasMany
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+    public function users():BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 }

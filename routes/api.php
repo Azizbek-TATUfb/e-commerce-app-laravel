@@ -1,7 +1,15 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\DeliveryMethodController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentTypeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserPaymentCardsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -10,15 +18,25 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::post('login',[AuthController::class,'login']);
+Route::post('logout',[AuthController::class,'logout']);
+Route::post('register',[AuthController::class,'register']);
+Route::post('user',[AuthController::class,'user'])->middleware('auth:sanctum');
 
 Route::apiResources([
-    'categories' => CategoryController::class
+    'categories.products' => CategoryProductController::class,
+    'categories' => CategoryController::class,
+    'favorites' => FavoriteController::class,
+    'products' => ProductController::class,
+    'orders' => OrderController::class,
+    'delivery-methods' => DeliveryMethodController::class,
+    'payment-types' => PaymentTypeController::class,
+    'user-addresses' => UserAddressController::class,
+    'user-payment-cards' => UserPaymentCardsController::class,
 ]);
